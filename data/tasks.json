@@ -1,0 +1,24 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Welcome to Tasks",
+      "notes": "This is your first task. You can mark it complete, set a due date, or flag it as priority.",
+      "completed": false,
+      "priority": false,
+      "dueDate": null,
+      "createdAt": "2026-03-22T00:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "f6b8c71f-a24d-4aeb-b836-d730cae9f1cd",
+      "title": "test",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": null,
+      "createdAt": "2026-03-22T23:48:29.887Z",
+      "deletedAt": "2026-03-22T23:48:31.802Z"
+    }
+  ]
+}
