@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Task } from "@/app/types";
 import TaskItem from "@/app/components/TaskItem";
 import AddTask from "@/app/components/AddTask";
+import { usePullToRefresh } from "@/app/hooks/usePullToRefresh";
 
 type View = "all" | "priority" | "scheduled" | "trash";
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const lastMtime = useRef<number>(0);
   const editingCount = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const onEditStart = useCallback(() => { editingCount.current++; }, []);
   const onEditEnd = useCallback(() => { editingCount.current--; }, []);
@@ -28,6 +30,8 @@ export default function Home() {
     setTasks(data.tasks);
     setTrashedTasks(trashData.tasks);
   }, []);
+
+  const { pullDistance, isRefreshing } = usePullToRefresh(containerRef, fetchTasks);
 
   useEffect(() => {
     setMounted(true);
@@ -120,7 +124,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div ref={containerRef} className="min-h-screen bg-gray-50">
+      {/* Pull-to-refresh indicator */}
+      <div
+        className="flex justify-center items-center overflow-hidden transition-all duration-200 ease-out"
+        style={{
+          height: pullDistance > 0 ? `${pullDistance}px` : "0px",
+          transition: pullDistance > 0 ? "none" : "height 0.3s ease-out",
+        }}
+      >
+        <svg
+          className={`w-6 h-6 text-gray-400 ${isRefreshing ? "animate-spin" : ""}`}
+          style={{
+            transform: isRefreshing ? undefined : `rotate(${Math.min(pullDistance / 60, 1) * 180}deg)`,
+            opacity: Math.min(pullDistance / 30, 1),
+            transition: pullDistance > 0 ? "none" : "opacity 0.3s ease-out",
+          }}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 12a9 9 0 1 1-6.22-8.56" />
+          <polyline points="21 3 21 9 15 9" />
+        </svg>
+      </div>
       <div className="max-w-xl mx-auto pt-12 pb-24 px-4">
         {/* View switcher */}
         <div className="flex items-center mb-8">
