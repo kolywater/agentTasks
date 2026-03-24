@@ -8,18 +8,16 @@ You can interact with the task database directly via sqlite3.
 ### Creating tasks
 
 ```bash
-sqlite3 /Users/aiden/Software/pocketProjects/data/pocket-projects.db "INSERT INTO tasks (id, project_id, title, description, status, priority, sort_key, created_at, updated_at) VALUES (lower(hex(randomblob(6))), 'ul8wU6d3CLk5', 'Task title here', 'Optional description', 'intake', 'P2', unixepoch(), unixepoch(), unixepoch())"
+sqlite3 /Users/aiden/Software/pocketProjects/data/pocket-projects.db "INSERT INTO tasks (id, project_id, title, description, status, sort_key, created_at, updated_at) VALUES (lower(hex(randomblob(6))), 'ul8wU6d3CLk5', 'Task title here', 'Optional description', 'intake', unixepoch(), unixepoch(), unixepoch())"
 ```
 
 - `id`: use `lower(hex(randomblob(6)))` to generate a 12-char hex ID
 - `status`: always use `intake` for new tasks — the user will triage from the dashboard
-- `priority`: `P1`, `P2`, or `P3`
-- `category`: `feature`, `design`, `bug`, `in review`, or `brainstorm`
 
 ### Listing tasks
 
 ```bash
-sqlite3 -json /Users/aiden/Software/pocketProjects/data/pocket-projects.db "SELECT id, title, status, priority, summary FROM tasks WHERE project_id = 'ul8wU6d3CLk5' ORDER BY sort_key DESC"
+sqlite3 -json /Users/aiden/Software/pocketProjects/data/pocket-projects.db "SELECT id, title, status, summary FROM tasks WHERE project_id = 'ul8wU6d3CLk5' ORDER BY sort_key DESC"
 ```
 
 ### Updating tasks

@@ -1,4 +1,4 @@
-<!-- generated-at: f9ec5b5851312240d0e8e79ebfb4eff1c27ecf9c -->
+<!-- generated-at: 853c6c4253e9fd6e4e14cda83cf9f83b66ea3220 -->
 <!-- generated-at: 2026-03-23 -->
 # CODEBASE.md
 
@@ -11,17 +11,19 @@
 
 | Path | Purpose |
 |------|---------|
-| `app/page.tsx` | Root page, client component — all state, filtering, view switching |
+| `app/page.tsx` | Root page, client component — all state, filtering, view switching, polling (2s interval via `/api/tasks/poll`), pull-to-refresh |
 | `app/layout.tsx` | Root layout — sets title/metadata, loads globals.css |
 | `app/globals.css` | Single line: `@import "tailwindcss"` |
 | `app/types.ts` | Shared `Task` and `TasksData` interfaces |
-| `app/components/TaskItem.tsx` | Task row — inline edit, complete toggle, swipe-to-reveal actions (Flag/Delete), desktop hover actions |
+| `app/components/TaskItem.tsx` | Task row — inline edit, complete toggle, swipe-to-reveal actions (Flag/Delete), desktop hover actions, recurrence UI |
 | `app/components/AddTask.tsx` | Inline form to create a new task (title only) |
-| `app/hooks/useSwipe.ts` | Touch swipe hook — reveals 2×70px action buttons on left-swipe; one row open at a time (module-level singleton) |
+| `app/hooks/useSwipe.ts` | Touch swipe hook — reveals 2×70px action buttons on left-swipe; one row open at a time (module-level singleton `closeCurrentRow`) |
+| `app/hooks/usePullToRefresh.ts` | Pull-to-refresh hook — triggers `fetchTasks` when pulled ≥60px from scroll-top; dampened input, direction-aware, blocks during swipe |
 | `app/api/tasks/route.ts` | REST CRUD — GET / POST / PUT / DELETE for tasks |
 | `app/api/tasks/reorder/route.ts` | PUT only — reorders tasks array by `orderedIds[]` |
 | `app/api/tasks/poll/route.ts` | GET only — returns `{ mtime: number }` of `data/tasks.json`; for change detection |
 | `data/tasks.json` | **Persistent store** — all tasks in a flat JSON array |
+| `data/specs/` | Agent spec files, named `{taskId}.md`; written during `plan` stage, deleted after build |
 | `next.config.ts` | Next.js config (default, no custom settings) |
 | `tsconfig.json` | TypeScript config; `@/` path alias maps to project root |
 | `README.md` | **Agent-facing** — API quick reference, task schema, agent rules |
@@ -42,7 +44,7 @@
       "recurDays": "number | null",       // recurrence interval in days; null = one-off
       "recurSource": "string | null",     // id of completed task that spawned this one; null = manual
       "createdAt": "ISO8601",
-      "deletedAt": "ISO8601 | null"   // null = active, set = soft-deleted (trash)
+      "deletedAt": "ISO8601 | null"       // null = active, set = soft-deleted (trash)
     }
   ]
 }
@@ -71,7 +73,8 @@ No test suite configured.
 - **Path alias:** `@/` → project root (e.g., `@/app/types`)
 - **IDs:** `crypto.randomUUID()` for new tasks; legacy tasks may have numeric string IDs
 - **Dates:** stored as ISO 8601 strings; `dueDate` time is fixed to `T12:00:00` on input to avoid timezone off-by-one
-- **Mobile actions:** swipe left on a task row to reveal Flag + Delete buttons (140px total, 2×70px); only one row can be open at a time via `closeCurrentRow` module singleton in `useSwipe.ts`
+- **Mobile swipe:** swipe left on a task row to reveal Flag + Delete buttons (140px total, 2×70px); only one row can be open at a time via `closeCurrentRow` module singleton in `useSwipe.ts`
+- **Mobile pull-to-refresh:** pull from top (≥60px) triggers `fetchTasks`; direction-aware so it doesn't conflict with horizontal swipe
 - **Desktop actions:** hover on a task row to show priority flag + delete icon buttons
 - **No auth, no env vars, no external services**
 - **Agent access:** edit `data/tasks.json` directly, or call the HTTP API. See `README.md` for full reference.

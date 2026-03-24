@@ -1,4 +1,4 @@
-<!-- generated-at: f9ec5b5851312240d0e8e79ebfb4eff1c27ecf9c -->
+<!-- generated-at: 853c6c4253e9fd6e4e14cda83cf9f83b66ea3220 -->
 <!-- generated-at: 2026-03-23 -->
 # Feature Map
 
@@ -16,10 +16,11 @@
 | **Soft-delete task (desktop)** | `app/components/TaskItem.tsx` — hover trash icon | `DELETE /api/tasks?id={id}` | Sets `deletedAt = new Date().toISOString()` |
 | **Soft-delete task (mobile)** | `app/components/TaskItem.tsx` — swipe left → "Delete" button | `DELETE /api/tasks?id={id}` | Same as desktop via `useSwipe` reveal |
 | **Swipe-to-reveal actions** | `app/components/TaskItem.tsx` + `app/hooks/useSwipe.ts` | — | Touch events; translates row −140px; one-row-at-a-time via module singleton `closeCurrentRow` |
+| **Pull-to-refresh** | `app/page.tsx` + `app/hooks/usePullToRefresh.ts` | — | Pull ≥60px from scroll-top triggers `fetchTasks`; direction-aware, dampened, blocks while refreshing |
 | **Restore from trash** | `app/page.tsx` — Restore button in trash view | `PUT /api/tasks` with `{ id, deletedAt: null }` | Clears `deletedAt` field |
 | **Permanently delete** | `app/page.tsx` — Delete button in trash view | `DELETE /api/tasks?id={id}&permanent=true` | Splices task out of array |
 | **Reorder tasks** | _(API / agent only — no drag UI)_ | `PUT /api/tasks/reorder` with `{ orderedIds }` | `app/api/tasks/reorder/route.ts` — rebuilds array by ID order |
-| **Poll for changes** | _(agent/external use only)_ | `GET /api/tasks/poll` | Returns `{ mtime: number }` of `data/tasks.json` for change detection |
+| **Poll for changes** | `app/page.tsx` — 2s `setInterval` using `lastMtime` ref | `GET /api/tasks/poll` | Returns `{ mtime: number }` of `data/tasks.json`; skips refresh if a task is being edited |
 | **Past-due indicator** | `app/components/TaskItem.tsx` — `isPastDue` → grey date text | — | Client-side: `new Date(dueDate) < new Date()` |
 | **View badge counts** | `app/page.tsx` — `viewConfig` object | — | Client-side counts derived from fetched task arrays |
-| **Recurring tasks** | `app/components/TaskItem.tsx` — recurDays input in edit mode, repeat indicator in view | `PUT /api/tasks` | On completion of task with `recurDays > 0`, spawns new task with due date = today + N days |
+| **Recurring tasks** | `app/components/TaskItem.tsx` — `recurDays` input in edit mode, repeat indicator in view | `PUT /api/tasks` | On completion of task with `recurDays > 0`, spawns new task with due date = today + N days; tracks origin via `recurSource` |
