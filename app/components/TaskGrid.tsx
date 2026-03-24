@@ -79,7 +79,7 @@ function GridTile({ task, onUpdate, onDelete, onEditStart, onEditEnd }: {
       <div className="flex items-start gap-2.5">
         <button
           onClick={() => onUpdate({ id: task.id, completed: !task.completed })}
-          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+          className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
             task.completed
               ? "bg-blue-500 border-blue-500"
               : "border-gray-300 hover:border-blue-400"
@@ -128,7 +128,7 @@ function GridTile({ task, onUpdate, onDelete, onEditStart, onEditEnd }: {
           </div>
         ) : (
           <div className="flex-1 min-w-0 cursor-pointer" onClick={startEditing}>
-            <p className={`text-sm font-medium line-clamp-2 ${task.completed ? "line-through text-gray-400" : ""}`}>
+            <p className={`text-lg font-semibold line-clamp-2 ${task.completed ? "line-through text-gray-400" : ""}`}>
               {task.title}
             </p>
             {task.dueDate && (
