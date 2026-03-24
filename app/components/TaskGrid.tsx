@@ -71,7 +71,7 @@ function GridTile({ task, onUpdate, onDelete, onEditStart, onEditEnd }: {
 
   return (
     <div
-      className={`relative rounded-xl bg-white shadow-sm p-4 group ${
+      className={`relative rounded-xl bg-white shadow-sm p-4 group min-h-[120px] ${
         task.completed ? "opacity-50" : ""
       }`}
     >
@@ -128,7 +128,7 @@ function GridTile({ task, onUpdate, onDelete, onEditStart, onEditEnd }: {
           </div>
         ) : (
           <div className="flex-1 min-w-0 cursor-pointer" onClick={startEditing}>
-            <p className={`text-lg font-semibold line-clamp-2 ${task.completed ? "line-through text-gray-400" : ""}`}>
+            <p className={`text-lg font-semibold line-clamp-4 ${task.completed ? "line-through text-gray-400" : ""}`}>
               {task.title}
             </p>
             {task.dueDate && (
