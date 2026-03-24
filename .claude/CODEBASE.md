@@ -39,6 +39,8 @@
       "completed": false,
       "priority": false,
       "dueDate": "ISO8601 | null",
+      "recurDays": "number | null",       // recurrence interval in days; null = one-off
+      "recurSource": "string | null",     // id of completed task that spawned this one; null = manual
       "createdAt": "ISO8601",
       "deletedAt": "ISO8601 | null"   // null = active, set = soft-deleted (trash)
     }

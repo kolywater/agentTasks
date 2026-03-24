@@ -18,10 +18,14 @@ A collaborative task manager between the user and an AI agent. The user sees tas
   "completed": false,
   "priority": false,
   "dueDate": "2026-03-25T12:00:00.000Z",
+  "recurDays": 7,
+  "recurSource": null,
   "createdAt": "2026-03-22T00:00:00.000Z",
   "deletedAt": null
 }
 ```
+
+`recurDays` is the recurrence interval in days (`null` for one-off tasks). `recurSource` is the ID of the completed task that spawned this one (`null` if created manually).
 
 All tasks live in `data/tasks.json` as `{ "tasks": [...] }`. You can edit this file directly.
 
@@ -45,9 +49,9 @@ All tasks live in `data/tasks.json` as `{ "tasks": [...] }`. You can edit this f
 POST /api/tasks
 Content-Type: application/json
 
-{ "title": "Buy groceries", "notes": "Milk, eggs, bread", "priority": true, "dueDate": "2026-03-25T12:00:00.000Z" }
+{ "title": "Buy groceries", "notes": "Milk, eggs, bread", "priority": true, "dueDate": "2026-03-25T12:00:00.000Z", "recurDays": 7 }
 ```
-Only `title` is required.
+Only `title` is required. `recurDays` is optional — set it to create a recurring task.
 
 ### Update a task
 ```
@@ -56,7 +60,7 @@ Content-Type: application/json
 
 { "id": "task-uuid", "priority": true, "dueDate": "2026-03-28T12:00:00.000Z" }
 ```
-Include `id` and any fields to change.
+Include `id` and any fields to change. Setting `completed: true` on a task with `recurDays` will automatically create a new recurring copy with a future due date.
 
 ### Reorder tasks
 ```
@@ -87,9 +91,12 @@ A task can appear in multiple views (e.g., a priority task with a due date appea
 - Delete tasks that are no longer relevant (they go to trash, not permanently removed).
 - Restore tasks from trash if they become relevant again.
 - Reorder tasks to keep the most important things visible at the top.
+- Set `recurDays` when the user mentions something that needs to happen regularly (e.g., "remind me every 3 days to water the plants").
+- When completing a recurring task, know that a new one will be auto-created — don't create a duplicate manually.
 - Use your judgment. Keep the list clean and useful.
 
 ### Don't
 - Don't permanently delete tasks unless they are truly no longer needed.
 - Don't remove tasks the user added without confirmation.
 - Don't create duplicate tasks for the same action item.
+- Don't manually create follow-up tasks for recurring items — the system handles it on completion.

@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
     completed: false,
     priority: body.priority || false,
     dueDate: body.dueDate || null,
+    recurDays: body.recurDays && body.recurDays > 0 ? body.recurDays : null,
+    recurSource: body.recurSource || null,
     createdAt: new Date().toISOString(),
     deletedAt: null,
   };
@@ -56,8 +58,36 @@ export async function PUT(req: NextRequest) {
   }
 
   data.tasks[index] = { ...data.tasks[index], ...body };
+
+  // Spawn a new recurring task if this completion triggers recurrence
+  let newRecurringTask: Task | null = null;
+  const updatedTask = data.tasks[index];
+  if (
+    body.completed === true &&
+    updatedTask.recurDays &&
+    updatedTask.recurDays > 0
+  ) {
+    const futureDate = new Date();
+    futureDate.setUTCDate(futureDate.getUTCDate() + updatedTask.recurDays);
+    futureDate.setUTCHours(12, 0, 0, 0);
+
+    newRecurringTask = {
+      id: crypto.randomUUID(),
+      title: updatedTask.title,
+      notes: updatedTask.notes,
+      completed: false,
+      priority: updatedTask.priority,
+      dueDate: futureDate.toISOString(),
+      recurDays: updatedTask.recurDays,
+      recurSource: updatedTask.id,
+      createdAt: new Date().toISOString(),
+      deletedAt: null,
+    };
+    data.tasks.push(newRecurringTask);
+  }
+
   writeTasks(data);
-  return NextResponse.json(data.tasks[index]);
+  return NextResponse.json({ task: updatedTask, newRecurringTask });
 }
 
 export async function DELETE(req: NextRequest) {

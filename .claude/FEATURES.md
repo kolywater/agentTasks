@@ -22,3 +22,4 @@
 | **Poll for changes** | _(agent/external use only)_ | `GET /api/tasks/poll` | Returns `{ mtime: number }` of `data/tasks.json` for change detection |
 | **Past-due indicator** | `app/components/TaskItem.tsx` — `isPastDue` → grey date text | — | Client-side: `new Date(dueDate) < new Date()` |
 | **View badge counts** | `app/page.tsx` — `viewConfig` object | — | Client-side counts derived from fetched task arrays |
+| **Recurring tasks** | `app/components/TaskItem.tsx` — recurDays input in edit mode, repeat indicator in view | `PUT /api/tasks` | On completion of task with `recurDays > 0`, spawns new task with due date = today + N days |

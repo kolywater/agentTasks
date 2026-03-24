@@ -5,6 +5,8 @@ export interface Task {
   completed: boolean;
   priority: boolean;
   dueDate: string | null;
+  recurDays: number | null;
+  recurSource: string | null;
   createdAt: string;
   deletedAt: string | null;
 }

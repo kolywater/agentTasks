@@ -18,6 +18,7 @@ export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, 
   const [title, setTitle] = useState(task.title);
   const [notes, setNotes] = useState(task.notes);
   const [dueDate, setDueDate] = useState(task.dueDate || "");
+  const [recurDays, setRecurDays] = useState<string>(task.recurDays ? String(task.recurDays) : "");
 
   const { rowRef, close, handlers } = useSwipe();
 
@@ -32,11 +33,13 @@ export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, 
   }
 
   function handleSave() {
+    const parsedRecurDays = recurDays ? parseInt(recurDays, 10) : null;
     onUpdate({
       id: task.id,
       title,
       notes,
       dueDate: dueDate || null,
+      recurDays: parsedRecurDays && parsedRecurDays > 0 ? parsedRecurDays : null,
     });
     stopEditing();
   }
@@ -136,6 +139,14 @@ export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, 
                 onChange={(e) => setDueDate(e.target.value ? new Date(e.target.value + "T12:00:00").toISOString() : "")}
                 className="text-base bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <input
+                type="number"
+                min="1"
+                value={recurDays}
+                onChange={(e) => setRecurDays(e.target.value)}
+                placeholder="Repeat every N days"
+                className="text-base bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
               <div className="flex gap-2">
                 <button onClick={handleSave} className="text-xs text-blue-600 font-medium">Save</button>
                 <button onClick={stopEditing} className="text-xs text-gray-400">Cancel</button>
@@ -152,7 +163,13 @@ export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, 
               {task.dueDate && (
                 <p className={`text-xs mt-0.5 ${isPastDue ? "text-gray-500" : "text-gray-400"}`}>
                   {formatDate(task.dueDate)}
+                  {task.recurDays && task.recurDays > 0 && (
+                    <span className="ml-1.5 text-blue-400">&#x21BB; Every {task.recurDays}d</span>
+                  )}
                 </p>
+              )}
+              {!task.dueDate && task.recurDays && task.recurDays > 0 && (
+                <p className="text-xs mt-0.5 text-blue-400">&#x21BB; Every {task.recurDays}d</p>
               )}
             </div>
           )}
