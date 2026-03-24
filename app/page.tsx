@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Task } from "@/app/types";
 import TaskItem from "@/app/components/TaskItem";
+import TaskGrid from "@/app/components/TaskGrid";
 import AddTask from "@/app/components/AddTask";
 import { usePullToRefresh } from "@/app/hooks/usePullToRefresh";
 
@@ -12,6 +13,7 @@ export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [trashedTasks, setTrashedTasks] = useState<Task[]>([]);
   const [view, setView] = useState<View>("priority");
+  const [layoutMode, setLayoutMode] = useState<"list" | "grid">("list");
   const [mounted, setMounted] = useState(false);
   const lastMtime = useRef<number>(0);
   const editingCount = useRef<number>(0);
@@ -35,6 +37,10 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    const saved = localStorage.getItem("layoutMode");
+    if (saved === "grid" || saved === "list") {
+      setLayoutMode(saved);
+    }
     fetchTasks();
   }, [fetchTasks]);
 
@@ -123,6 +129,14 @@ export default function Home() {
     trash: { label: "Trash", color: "text-red-600", count: trashedTasks.length },
   };
 
+  function toggleLayoutMode() {
+    const next = layoutMode === "list" ? "grid" : "list";
+    setLayoutMode(next);
+    localStorage.setItem("layoutMode", next);
+  }
+
+  const useGrid = view === "priority" && layoutMode === "grid";
+
   return (
     <div ref={containerRef} className="min-h-screen bg-gray-50">
       {/* Pull-to-refresh indicator */}
@@ -174,6 +188,28 @@ export default function Home() {
               </button>
             ))}
           </div>
+          {view === "priority" && (
+            <button
+              onClick={toggleLayoutMode}
+              className="ml-2 p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-white/60 transition-all"
+              title={layoutMode === "list" ? "Switch to grid" : "Switch to list"}
+            >
+              {layoutMode === "list" ? (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <line x1="4" y1="18" x2="20" y2="18" />
+                </svg>
+              )}
+            </button>
+          )}
           <div className="flex-1" />
           <button
             onClick={() => setView("trash")}
@@ -198,6 +234,48 @@ export default function Home() {
         </h1>
 
         {/* Task list */}
+        {useGrid ? (
+          <>
+            {incompleteTasks.length === 0 && completedTasks.length === 0 && (
+              <div className="bg-white rounded-xl shadow-sm px-4 py-8 text-center text-gray-400 text-sm">
+                No priority tasks. Flag a task to see it here.
+              </div>
+            )}
+
+            {incompleteTasks.length > 0 && (
+              <TaskGrid
+                tasks={incompleteTasks}
+                onUpdate={updateTask}
+                onDelete={deleteTask}
+                onEditStart={onEditStart}
+                onEditEnd={onEditEnd}
+              />
+            )}
+
+            <div className="mt-3 bg-white rounded-xl shadow-sm overflow-hidden">
+              <AddTask onAdd={addTask} onEditStart={onEditStart} onEditEnd={onEditEnd} />
+            </div>
+
+            {completedTasks.length > 0 && (
+              <div className="mt-3 bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="px-4 py-2 bg-gray-50 text-xs text-gray-400 font-medium uppercase tracking-wider">
+                  Completed
+                </div>
+                {completedTasks.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    view={view}
+                    onUpdate={updateTask}
+                    onDelete={deleteTask}
+                    onEditStart={onEditStart}
+                    onEditEnd={onEditEnd}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           {view === "trash" ? (
             <>
@@ -279,6 +357,7 @@ export default function Home() {
             </>
           )}
         </div>
+        )}
       </div>
     </div>
   );
