@@ -27,6 +27,18 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
 
   function formatDate(iso: string) {
     const d = new Date(iso);
+    const now = new Date();
+    const dYear = d.getFullYear(), dMonth = d.getMonth(), dDay = d.getDate();
+    const nYear = now.getFullYear(), nMonth = now.getMonth(), nDay = now.getDate();
+
+    if (dYear === nYear && dMonth === nMonth && dDay === nDay) return "Today";
+
+    const tomorrow = new Date(nYear, nMonth, nDay + 1);
+    if (dYear === tomorrow.getFullYear() && dMonth === tomorrow.getMonth() && dDay === tomorrow.getDate()) return "Tomorrow";
+
+    const yesterday = new Date(nYear, nMonth, nDay - 1);
+    if (dYear === yesterday.getFullYear() && dMonth === yesterday.getMonth() && dDay === yesterday.getDate()) return "Yesterday";
+
     return d.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -66,7 +78,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full text-sm font-medium bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full text-base font-medium bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               autoFocus
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
@@ -74,13 +86,13 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Notes"
-              className="w-full text-xs bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full text-base bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="date"
               value={dueDate ? dueDate.split("T")[0] : ""}
               onChange={(e) => setDueDate(e.target.value ? new Date(e.target.value + "T12:00:00").toISOString() : "")}
-              className="text-xs bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-base bg-white border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div className="flex gap-2">
               <button onClick={handleSave} className="text-xs text-blue-600 font-medium">Save</button>
@@ -96,7 +108,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
               <p className="text-xs text-gray-400 mt-0.5 truncate">{task.notes}</p>
             )}
             {task.dueDate && (
-              <p className={`text-xs mt-0.5 ${isPastDue ? "text-red-500" : "text-gray-400"}`}>
+              <p className={`text-xs mt-0.5 ${isPastDue ? "text-gray-500" : "text-gray-400"}`}>
                 {formatDate(task.dueDate)}
               </p>
             )}

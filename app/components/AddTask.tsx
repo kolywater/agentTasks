@@ -27,7 +27,7 @@ export default function AddTask({ onAdd }: AddTaskProps) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Add a task..."
-        className="flex-1 text-sm bg-transparent focus:outline-none placeholder-gray-400"
+        className="flex-1 text-base bg-transparent focus:outline-none placeholder-gray-400"
       />
     </form>
   );
