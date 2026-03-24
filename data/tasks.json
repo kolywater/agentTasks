@@ -8,7 +8,7 @@
       "priority": false,
       "dueDate": null,
       "createdAt": "2026-03-22T00:00:00.000Z",
-      "deletedAt": null
+      "deletedAt": "2026-03-22T23:55:32.605Z"
     },
     {
       "id": "f6b8c71f-a24d-4aeb-b836-d730cae9f1cd",
@@ -19,6 +19,176 @@
       "dueDate": null,
       "createdAt": "2026-03-22T23:48:29.887Z",
       "deletedAt": "2026-03-22T23:48:31.802Z"
+    },
+    {
+      "id": "efcc5670-6915-4aaf-940b-c778a291aedf",
+      "title": "Pack for Moab trip",
+      "notes": "",
+      "completed": false,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-22T23:54:16.367Z",
+      "deletedAt": null
+    },
+    {
+      "id": "5f4abead-759f-4782-92d1-55ca3eb31b4c",
+      "title": "Chat with Kimberly about groceries",
+      "notes": "rice, chicken, pita and veggies",
+      "completed": false,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-22T23:54:19.687Z",
+      "deletedAt": null
+    },
+    {
+      "id": "ddd8d355-0f4f-4284-8934-5cb5c9df0d61",
+      "title": "Call dad",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-22T23:54:24.941Z",
+      "deletedAt": null
+    },
+    {
+      "id": "0358a954-1d2d-49e9-a510-bb2ae3c7e48b",
+      "title": "Fix MetLife account",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": "2026-03-23T12:00:00.000Z",
+      "createdAt": "2026-03-22T23:54:30.707Z",
+      "deletedAt": null
+    },
+    {
+      "id": "f802265d-34b8-402e-ae7e-6eb913230a25",
+      "title": "Send tax documents",
+      "notes": "",
+      "completed": false,
+      "priority": true,
+      "dueDate": "2026-03-23T12:00:00.000Z",
+      "createdAt": "2026-03-22T23:54:37.801Z",
+      "deletedAt": null
+    },
+    {
+      "id": "ec8c6b95-c42c-4b4f-9bfb-3c3d645e32df",
+      "title": "Contact Rivian about account",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": "2026-03-23T12:00:00.000Z",
+      "createdAt": "2026-03-22T23:54:46.184Z",
+      "deletedAt": null
+    },
+    {
+      "id": "587e5b1a-7f84-4f07-8dea-f778f7504ade",
+      "title": "Animal kind",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": "2026-03-30T12:00:00.000Z",
+      "createdAt": "2026-03-23T00:03:02.076Z",
+      "deletedAt": null
+    },
+    {
+      "id": "932a8133-8878-4bc2-9241-d331e03fed45",
+      "title": "Coffee machine how-to",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": "2026-03-26T12:00:00.000Z",
+      "createdAt": "2026-03-23T00:03:06.455Z",
+      "deletedAt": null
+    },
+    {
+      "id": "edd6c9bd-2052-4575-8b85-08ceb61d7ba6",
+      "title": "setup openclaw to fall back to ollama",
+      "notes": "",
+      "completed": false,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-23T00:20:13.875Z",
+      "deletedAt": null
+    },
+    {
+      "id": "93d02baa-0a37-464c-9c46-6b649beaaf06",
+      "title": "task list: if you add to priority, it doesnt go to priority",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": null,
+      "createdAt": "2026-03-23T00:20:42.902Z",
+      "deletedAt": null
+    },
+    {
+      "id": "9f46e74e-8621-4aa3-9b34-d57791733dcf",
+      "title": "task list: combine priority and scheduled and all",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": null,
+      "createdAt": "2026-03-23T00:20:50.690Z",
+      "deletedAt": null
+    },
+    {
+      "id": "9c76149e-6d46-41c5-8de9-4069d88283e3",
+      "title": "Message Bob about the fridge",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": "2026-03-23T12:00:00.000Z",
+      "createdAt": "2026-03-23T06:19:18.037Z",
+      "deletedAt": null
+    },
+    {
+      "id": "0248fe59-1bd3-4370-87cb-7804ae498516",
+      "title": "Test overdue task",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": "2026-03-22T09:00:00.000Z",
+      "createdAt": "2026-03-23T18:33:18.666Z",
+      "deletedAt": null
+    },
+    {
+      "id": "17c93dd6-fab5-4723-a164-016fff873e09",
+      "title": "Costco order",
+      "notes": "",
+      "completed": false,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-23T20:04:00.161Z",
+      "deletedAt": null
+    },
+    {
+      "id": "48de7250-3801-4f60-bb7c-21fb5ee923b9",
+      "title": "Move things downstairs fridge for smoothie",
+      "notes": "",
+      "completed": false,
+      "priority": false,
+      "dueDate": null,
+      "createdAt": "2026-03-23T20:04:14.496Z",
+      "deletedAt": null
+    },
+    {
+      "id": "cecc9542-0ef1-44f1-8819-de8bf8173861",
+      "title": "Test",
+      "notes": "",
+      "completed": true,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-24T02:30:02.978Z",
+      "deletedAt": null
+    },
+    {
+      "id": "d2cc33ab-e76d-4d1c-8bda-550406c7798b",
+      "title": "Reschedule Linda to Mar 30",
+      "notes": "",
+      "completed": false,
+      "priority": true,
+      "dueDate": null,
+      "createdAt": "2026-03-24T04:33:41.580Z",
+      "deletedAt": null
     }
   ]
 }
