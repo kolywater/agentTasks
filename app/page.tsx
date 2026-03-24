@@ -10,7 +10,7 @@ type View = "all" | "priority" | "scheduled" | "trash";
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [trashedTasks, setTrashedTasks] = useState<Task[]>([]);
-  const [view, setView] = useState<View>("all");
+  const [view, setView] = useState<View>("priority");
   const [mounted, setMounted] = useState(false);
 
   const fetchTasks = useCallback(async () => {
@@ -90,25 +90,43 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-xl mx-auto pt-12 pb-24 px-4">
         {/* View switcher */}
-        <div className="flex gap-2 mb-8">
-          {(Object.keys(viewConfig) as View[]).map((v) => (
-            <button
-              key={v}
-              onClick={() => setView(v)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                view === v
-                  ? "bg-white shadow-sm " + viewConfig[v].color
-                  : "text-gray-400 hover:text-gray-600"
-              }`}
-            >
-              {viewConfig[v].label}
-              <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                view === v ? "bg-gray-100" : "bg-gray-200/50"
-              }`}>
-                {viewConfig[v].count}
-              </span>
-            </button>
-          ))}
+        <div className="flex items-center mb-8">
+          <div className="flex gap-1">
+            {(["priority", "scheduled", "all"] as View[]).map((v) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className={`flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-sm font-medium transition-all ${
+                  view === v
+                    ? "bg-white shadow-sm " + viewConfig[v].color
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                {viewConfig[v].label}
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                  view === v ? "bg-gray-100" : "bg-gray-200/50"
+                }`}>
+                  {viewConfig[v].count}
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="flex-1" />
+          <button
+            onClick={() => setView("trash")}
+            className={`flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-sm font-medium transition-all ${
+              view === "trash"
+                ? "bg-white shadow-sm " + viewConfig.trash.color
+                : "text-gray-400 hover:text-gray-600"
+            }`}
+          >
+            {viewConfig.trash.label}
+            <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+              view === "trash" ? "bg-gray-100" : "bg-gray-200/50"
+            }`}>
+              {viewConfig.trash.count}
+            </span>
+          </button>
         </div>
 
         {/* Title */}
