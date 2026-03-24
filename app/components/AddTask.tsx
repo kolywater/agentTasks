@@ -4,9 +4,11 @@ import { useState } from "react";
 
 interface AddTaskProps {
   onAdd: (title: string) => void;
+  onEditStart?: () => void;
+  onEditEnd?: () => void;
 }
 
-export default function AddTask({ onAdd }: AddTaskProps) {
+export default function AddTask({ onAdd, onEditStart, onEditEnd }: AddTaskProps) {
   const [title, setTitle] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -14,6 +16,7 @@ export default function AddTask({ onAdd }: AddTaskProps) {
     if (!title.trim()) return;
     onAdd(title.trim());
     setTitle("");
+    onEditEnd?.();
   }
 
   return (
@@ -26,6 +29,8 @@ export default function AddTask({ onAdd }: AddTaskProps) {
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        onFocus={onEditStart}
+        onBlur={onEditEnd}
         placeholder="Add a task..."
         className="flex-1 text-base bg-transparent focus:outline-none placeholder-gray-400"
       />

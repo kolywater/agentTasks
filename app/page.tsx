@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Task } from "@/app/types";
 import TaskItem from "@/app/components/TaskItem";
 import AddTask from "@/app/components/AddTask";
@@ -12,6 +12,11 @@ export default function Home() {
   const [trashedTasks, setTrashedTasks] = useState<Task[]>([]);
   const [view, setView] = useState<View>("priority");
   const [mounted, setMounted] = useState(false);
+  const lastMtime = useRef<number>(0);
+  const editingCount = useRef<number>(0);
+
+  const onEditStart = useCallback(() => { editingCount.current++; }, []);
+  const onEditEnd = useCallback(() => { editingCount.current--; }, []);
 
   const fetchTasks = useCallback(async () => {
     const [res, trashRes] = await Promise.all([
@@ -27,6 +32,30 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     fetchTasks();
+  }, [fetchTasks]);
+
+  // Poll for external file changes every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/tasks/poll");
+        if (!res.ok) return;
+        const { mtime } = await res.json();
+        if (lastMtime.current === 0) {
+          // First poll — just store the mtime, data was already fetched on mount
+          lastMtime.current = mtime;
+          return;
+        }
+        if (mtime !== lastMtime.current) {
+          lastMtime.current = mtime;
+          if (editingCount.current > 0) return;
+          fetchTasks();
+        }
+      } catch (e) {
+        console.error("Poll failed:", e);
+      }
+    }, 2000);
+    return () => clearInterval(interval);
   }, [fetchTasks]);
 
   if (!mounted) {
@@ -191,10 +220,12 @@ export default function Home() {
                   task={task}
                   onUpdate={updateTask}
                   onDelete={deleteTask}
+                  onEditStart={onEditStart}
+                  onEditEnd={onEditEnd}
                 />
               ))}
 
-              <AddTask onAdd={addTask} />
+              <AddTask onAdd={addTask} onEditStart={onEditStart} onEditEnd={onEditEnd} />
 
               {completedTasks.length > 0 && (
                 <>
@@ -207,6 +238,8 @@ export default function Home() {
                       task={task}
                       onUpdate={updateTask}
                       onDelete={deleteTask}
+                      onEditStart={onEditStart}
+                      onEditEnd={onEditEnd}
                     />
                   ))}
                 </>

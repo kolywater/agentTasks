@@ -8,15 +8,27 @@ interface TaskItemProps {
   task: Task;
   onUpdate: (task: Partial<Task> & { id: string }) => void;
   onDelete: (id: string) => void;
+  onEditStart?: () => void;
+  onEditEnd?: () => void;
 }
 
-export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
+export default function TaskItem({ task, onUpdate, onDelete, onEditStart, onEditEnd }: TaskItemProps) {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [notes, setNotes] = useState(task.notes);
   const [dueDate, setDueDate] = useState(task.dueDate || "");
 
   const { rowRef, close, handlers } = useSwipe();
+
+  function startEditing() {
+    setEditing(true);
+    onEditStart?.();
+  }
+
+  function stopEditing() {
+    setEditing(false);
+    onEditEnd?.();
+  }
 
   function handleSave() {
     onUpdate({
@@ -25,7 +37,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
       notes,
       dueDate: dueDate || null,
     });
-    setEditing(false);
+    stopEditing();
   }
 
   function formatDate(iso: string) {
@@ -125,11 +137,11 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
               />
               <div className="flex gap-2">
                 <button onClick={handleSave} className="text-xs text-blue-600 font-medium">Save</button>
-                <button onClick={() => setEditing(false)} className="text-xs text-gray-400">Cancel</button>
+                <button onClick={stopEditing} className="text-xs text-gray-400">Cancel</button>
               </div>
             </div>
           ) : (
-            <div onClick={() => setEditing(true)} className="cursor-pointer">
+            <div onClick={startEditing} className="cursor-pointer">
               <p className={`text-sm font-medium ${task.completed ? "line-through text-gray-400" : ""}`}>
                 {task.title}
               </p>
