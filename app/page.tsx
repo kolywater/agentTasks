@@ -34,10 +34,14 @@ export default function Home() {
   }
 
   async function addTask(title: string) {
+    const taskData: { title: string; priority?: boolean } = { title };
+    if (view === "priority") {
+      taskData.priority = true;
+    }
     await fetch("/api/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title }),
+      body: JSON.stringify(taskData),
     });
     fetchTasks();
   }
