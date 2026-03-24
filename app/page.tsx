@@ -218,6 +218,7 @@ export default function Home() {
                 <TaskItem
                   key={task.id}
                   task={task}
+                  view={view}
                   onUpdate={updateTask}
                   onDelete={deleteTask}
                   onEditStart={onEditStart}
@@ -236,6 +237,7 @@ export default function Home() {
                     <TaskItem
                       key={task.id}
                       task={task}
+                      view={view}
                       onUpdate={updateTask}
                       onDelete={deleteTask}
                       onEditStart={onEditStart}

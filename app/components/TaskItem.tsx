@@ -6,13 +6,14 @@ import { useSwipe } from "@/app/hooks/useSwipe";
 
 interface TaskItemProps {
   task: Task;
+  view?: string;
   onUpdate: (task: Partial<Task> & { id: string }) => void;
   onDelete: (id: string) => void;
   onEditStart?: () => void;
   onEditEnd?: () => void;
 }
 
-export default function TaskItem({ task, onUpdate, onDelete, onEditStart, onEditEnd }: TaskItemProps) {
+export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, onEditEnd }: TaskItemProps) {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [notes, setNotes] = useState(task.notes);
@@ -142,9 +143,16 @@ export default function TaskItem({ task, onUpdate, onDelete, onEditStart, onEdit
             </div>
           ) : (
             <div onClick={startEditing} className="cursor-pointer">
-              <p className={`text-sm font-medium ${task.completed ? "line-through text-gray-400" : ""}`}>
-                {task.title}
-              </p>
+              <div className="flex items-center gap-1">
+                {task.priority && (view === "scheduled" || view === "all") && (
+                  <svg className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2z" />
+                  </svg>
+                )}
+                <p className={`text-sm font-medium ${task.completed ? "line-through text-gray-400" : ""}`}>
+                  {task.title}
+                </p>
+              </div>
               {task.notes && (
                 <p className="text-xs text-gray-400 mt-0.5 truncate">{task.notes}</p>
               )}
