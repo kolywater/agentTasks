@@ -19,8 +19,9 @@
 | `app/api/tasks/route.ts` | REST CRUD — GET / POST / PUT / DELETE for tasks |
 | `app/api/tasks/reorder/route.ts` | PUT only — reorders tasks array by `orderedIds[]` |
 | `data/tasks.json` | **Persistent store** — all tasks in a flat JSON array |
-| `next.config.ts` | Next.js config (default, no custom settings observed) |
+| `next.config.ts` | Next.js config (default, no custom settings) |
 | `tsconfig.json` | TypeScript config; `@/` path alias maps to project root |
+| `README.md` | **Agent-facing** — API quick reference, task schema, agent rules |
 
 ## Data Layout
 
@@ -66,3 +67,4 @@ No test suite configured.
 - **IDs:** `crypto.randomUUID()` for new tasks; legacy tasks may have numeric string IDs
 - **Dates:** stored as ISO 8601 strings; `dueDate` time is fixed to `T12:00:00` on input to avoid timezone off-by-one
 - **No auth, no env vars, no external services**
+- **Agent access:** edit `data/tasks.json` directly, or call the HTTP API. See `README.md` for full reference.
