@@ -166,7 +166,7 @@ export default function TaskItem({ task, view, onUpdate, onDelete, onEditStart, 
         )}
 
         {/* Desktop hover actions (hidden on touch / mobile) */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded pl-1">
           <button
             onClick={() => onUpdate({ id: task.id, priority: !task.priority })}
             className={`p-1 rounded transition-colors ${
